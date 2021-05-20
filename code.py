@@ -8,7 +8,7 @@ import digitalio
 
 # ------------------------
 # Additional Libraries
-# These will have to be installed separetely
+# These will have to be installed separately
 # ------------------------
 
 import usb_hid
@@ -74,11 +74,11 @@ _FREQUENCY = 0.1
 _DEBOUNCE = 0.05
 
 
-
 # ------------------------
 # Mode Classes
 # ------------------------
-# Add as many macros to the 'macros' list as the number
+
+# Add as many macros to the 'macros' function as the number
 # of buttons/switches in the same order you would like the
 # buttons to be organized in. Array index 0 will be trggered
 # by btn_0, index 1 by btn_1,...
@@ -101,7 +101,7 @@ class LibraryModule:
                 increaseFlag,
                 decreaseFlag,
                 virtualCopy,
-                grid
+                nothing
                 ]
 
 class Culling:
@@ -117,10 +117,10 @@ class Culling:
         # add as many macros as the number of buttons/switches
         return [
                 oneToOneZoom,
-                previous,
+                goPrevious,
                 increaseFlag,
                 decreaseFlag,
-                next,
+                goNext,
                 nothing
                 ]
 
@@ -128,7 +128,7 @@ class Culling:
 # Shortcut/Macro Classes
 # ------------------------
 
-# Shortcuts for all modules
+### Shortcuts for all modules ###
 class nothing:
 
     def macroName():
@@ -137,7 +137,7 @@ class nothing:
     def macro():
         print('Do Nothing')
 
-class next:
+class goNext:
 
     def macroName():
         return 'Next Picture'
@@ -145,7 +145,7 @@ class next:
     def macro():
         kbd.send(Keycode.RIGHT_ARROW)
 
-class previous:
+class goPrevious:
 
     def macroName():
         return 'Previous Picture'
@@ -177,9 +177,9 @@ class virtualCopy:
     def macro():
         kbd.send(Keycode.CONTROL, Keycode.QUOTE)
 
-# Module-specific Shortcuts
+### Module Specific Shortcuts ###
 
-# Library Module
+### Library Module ###
 
 class editKeywords:
 
@@ -229,6 +229,25 @@ class survey:
     def macro():
         kbd.send(Keycode.N)
 
+class selectFlagged:
+
+    def macroName():
+        return "Select Flagged Photos"
+
+    def macro():
+        kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.A)
+
+### Develop Module ###
+
+class whiteBalance:
+
+    def macroName():
+        return "Select Flagged Photos"
+
+    def macro():
+        kbd.send(Keycode.CONTROL, Keycode.SHIFT, Keycode.U)
+
+
 # ------------------------
 # Functions
 # ------------------------
@@ -265,8 +284,6 @@ print('Ready') # DELETE
 # ------------------------
 # Main Loop
 # ------------------------
-
-mode_macros[0].macro()
 
 while True:
     # If Mode button is pressed, get the next mode
