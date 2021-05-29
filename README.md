@@ -24,6 +24,12 @@ Make sure you have these in the lib folder on your board:
 
 ## Layout
 
+More info coming
+
+## 3D Printing
+
+More info coming
+
 ## How to edit the code
 
 Make changes to the code block below if you will be using different pins on your board
@@ -47,7 +53,7 @@ class increaseFlag:
         return 'Increase Flag Status'
     
     def macro():
-        kbd.send(Keycode.CONTROL, Keycode.UP_ARROW)
+        kbd.send(Keycode.CONTROL, Keycode.UP_ARROW) # Shortcut key combination
 ```
 
 Once you have all the shortcut classes created, you can edit existing ```modes``` by altering or creating new classes following the format below.
@@ -63,7 +69,7 @@ class Culling:
 
     def macros():
         # This is where you add the list of macros for this mode
-        # add as many macros as the number of buttons/switches
+        # add as many macros as the number of macro buttons/switches
         return [
                 oneToOneZoom,
                 goPrevious,

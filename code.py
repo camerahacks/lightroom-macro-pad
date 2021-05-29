@@ -1,3 +1,13 @@
+# ------------------------------------------------------------ #
+# Raspberry Pi Pico Lithroom Macro Pad
+# @author André Costa dphacks.com
+# @link dphacks.com
+#
+# Refer to the License file for permissions to use and distribute
+# this software
+# Refer to the README file how to edit the macros in this code
+# ------------------------------------------------------------ #
+
 # ------------------------
 # Standard Libraries
 # ------------------------
@@ -14,6 +24,7 @@ import digitalio
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 
 # ------------------------
 # Definitions
@@ -22,6 +33,13 @@ from adafruit_hid.keycode import Keycode
 # LED - Pico's onboard lED is GP25
 led = digitalio.DigitalInOut(board.GP25)
 led.direction = digitalio.Direction.OUTPUT
+
+# Layout
+# -------------------------------#
+# |     |   0   |   1   |   2   |
+# -------------------------------#
+# | 6   |   3   |   4   |   5   |
+# -------------------------------#
 
 btn_0_pin = board.GP17
 btn_1_pin = board.GP4
@@ -34,6 +52,7 @@ btn_6_pin = board.GP0
 
 # Keyboard device.
 kbd = Keyboard(usb_hid.devices)
+layout = KeyboardLayoutUS(kbd)
 
 # Buttons/Switches
 btn_0 = digitalio.DigitalInOut(btn_0_pin)
@@ -70,8 +89,10 @@ mode_btn = btn_6
 # Global Variables
 # ------------------------
 
+_VERSION = '0.0.2'
+
 _FREQUENCY = 0.1
-_DEBOUNCE = 0.05
+_DEBOUNCE = 0.02
 
 
 # ------------------------
@@ -80,29 +101,32 @@ _DEBOUNCE = 0.05
 
 # Add as many macros to the 'macros' function as the number
 # of buttons/switches in the same order you would like the
-# buttons to be organized in. Array index 0 will be trggered
+# buttons to be organized in. Array index 0 will be triggered
 # by btn_0, index 1 by btn_1,...
 # If a button shouldn't do anything, add the 'nothing' macro
 # to its position
 
+class TestMode:
+    def name():
+        return 'Test Mode'
+
+    def color():
+        return ''
+
+    def macros():
+        return [nothing, paste, chrome, explorer]
 
 class LibraryModule:
     def name():
         return 'Library Module Shortcuts'
 
     def color():
-        return '' 
+        return ''
+
     def macros():
         # This is where you add the list of macros for this mode
         # add as many macros as the number of buttons/switches.
-        return [
-                grid,
-                editKeywords,
-                increaseFlag,
-                decreaseFlag,
-                virtualCopy,
-                nothing
-                ]
+        return [grid, editKeywords, increaseFlag, decreaseFlag, virtualCopy, nothing]
 
 class Culling:
     
@@ -115,14 +139,7 @@ class Culling:
     def macros():
         # This is where you add the list of macros for this mode
         # add as many macros as the number of buttons/switches
-        return [
-                oneToOneZoom,
-                goPrevious,
-                increaseFlag,
-                decreaseFlag,
-                goNext,
-                nothing
-                ]
+        return [oneToOneZoom, goPrevious, increaseFlag, decreaseFlag, goNext, nothing]
 
 # ------------------------
 # Shortcut/Macro Classes
@@ -172,7 +189,7 @@ class decreaseFlag:
 class virtualCopy:
 
     def macroName():
-        return 'Create Vitual Copy'
+        return 'Create Virtual Copy'
 
     def macro():
         kbd.send(Keycode.CONTROL, Keycode.QUOTE)
@@ -242,11 +259,66 @@ class selectFlagged:
 class whiteBalance:
 
     def macroName():
-        return "Select Flagged Photos"
+        return "Auto White Balance"
 
     def macro():
         kbd.send(Keycode.CONTROL, Keycode.SHIFT, Keycode.U)
 
+
+class copySettings:
+
+    def macroName():
+        return "Copy Develop Settings"
+
+    def macro():
+        kbd.send(Keycode.CONTROL, Keycode.SHIFT, Keycode.C)
+
+class pasteSettings:
+
+    def macroName():
+        return "Paste Develop Settings"
+
+    def macro():
+        kbd.send(Keycode.CONTROL, Keycode.SHIFT, Keycode.V)
+
+### Non-lightroom Macros ###
+# Mainly used for testing but can also be used inside Lightroom
+
+class copy:
+    
+    def macroName():
+        return "Copy"
+
+    def macro():
+        kbd.send(Keycode.CONTROL, Keycode.C)
+
+class paste:
+
+    def macroName():
+        return "Paste"
+
+    def macro():
+        kbd.send(Keycode.CONTROL, Keycode.V)
+
+class chrome:
+
+    def macroName():
+        return "Launch Chrome Browser"
+
+    def macro():
+        kbd.send(Keycode.GUI, Keycode.R)
+        time.sleep(0.05)
+        layout.write('chrome\n')
+
+class explorer:
+
+    def macroName():
+        return "Launch Chrome Browser"
+
+    def macro():
+        kbd.send(Keycode.GUI, Keycode.R)
+        time.sleep(0.05)
+        layout.write('explorer\n')
 
 # ------------------------
 # Functions
@@ -257,7 +329,7 @@ def init():
     global curr_mode
     global mode_macros
 
-    modes = [LibraryModule,Culling]
+    modes = [TestMode,LibraryModule,Culling]
     curr_mode = modes[0]
     mode_macros = curr_mode.macros()
 
@@ -278,6 +350,8 @@ for x in range(0, 5):
 	time.sleep(0.2)
 	led.value = True
 	time.sleep(0.2)
+
+led.value = False
 
 print('Ready') # DELETE
 
