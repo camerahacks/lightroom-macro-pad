@@ -47,9 +47,11 @@ if CPVersion >= (7, 0):
     # Turn off CIRCUITPY drive.
     if _DISABLEUSB:
         storage.disable_usb_drive()
+        print('USB Drive CIRCUITPY disabled')
     
     # Turn off REPL if button is not pressed.
     # Failsafe in case USB drive is also disabled
     if _DISABLEREPL:
         if button.value and importCDC:
             usb_cdc.disable()
+            print('REPL disabled')

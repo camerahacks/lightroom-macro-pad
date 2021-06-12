@@ -23,6 +23,7 @@ import digitalio
 
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
+from adafruit_hid.mouse import Mouse
 from adafruit_hid.keycode import Keycode
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 
@@ -45,12 +46,13 @@ btn_0_pin = board.GP17
 btn_1_pin = board.GP4
 btn_2_pin = board.GP6
 btn_3_pin = board.GP10
-btn_4_pin = board.GP27
-btn_5_pin = board.GP21
-btn_6_pin = board.GP0
+btn_4_pin = board.GP8
+btn_5_pin = board.GP14
+btn_6_pin = board.GP1
 
 
 # Keyboard device.
+m = Mouse(usb_hid.devices)
 kbd = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(kbd)
 
@@ -92,8 +94,7 @@ mode_btn = btn_6
 _VERSION = '0.0.2'
 
 _FREQUENCY = 0.1
-_DEBOUNCE = 0.02
-
+_DEBOUNCE = 0.05
 
 # ------------------------
 # Mode Classes
@@ -114,19 +115,9 @@ class TestMode:
         return ''
 
     def macros():
-        return [nothing, paste, chrome, explorer]
-
-class LibraryModule:
-    def name():
-        return 'Library Module Shortcuts'
-
-    def color():
-        return ''
-
-    def macros():
         # This is where you add the list of macros for this mode
         # add as many macros as the number of buttons/switches.
-        return [grid, editKeywords, increaseFlag, decreaseFlag, virtualCopy, nothing]
+        return [nothing, nothing, nothing, nothing, nothing, nothing]
 
 class Culling:
     
@@ -139,7 +130,29 @@ class Culling:
     def macros():
         # This is where you add the list of macros for this mode
         # add as many macros as the number of buttons/switches
-        return [oneToOneZoom, goPrevious, increaseFlag, decreaseFlag, goNext, nothing]
+        return [grid, increaseFlag, oneToOneZoom, goPrevious, decreaseFlag, goNext]
+
+class LibraryModule:
+    def name():
+        return 'Library Module Shortcuts'
+
+    def color():
+        return ''
+
+    def macros():
+        return [grid, increaseFlag, editKeywords, loupe, decreaseFlag, virtualCopy]
+
+class Photoshop:
+
+    def name():
+        return 'Photoshop Shortcuts'
+
+    def color():
+        return ''
+
+    def macros():
+        return [nothing, nothing, nothing, nothing, nothing, nothing]
+
 
 # ------------------------
 # Shortcut/Macro Classes
@@ -212,7 +225,7 @@ class oneToOneZoom:
         return 'Toggle Loupe and 1:1 Zoom'
 
     def macro():
-        kbd.send(Keycode.SPACE)
+        m.click(Mouse.LEFT_BUTTON)
 
 class loupe:
 
@@ -329,13 +342,12 @@ def init():
     global curr_mode
     global mode_macros
 
-    modes = [TestMode,LibraryModule,Culling]
+    modes = [Culling,LibraryModule, Photoshop]
     curr_mode = modes[0]
     mode_macros = curr_mode.macros()
 
 def debounce():
     time.sleep(_DEBOUNCE)
-
 
 # ------------------------
 # Boot Sequence
@@ -361,7 +373,7 @@ print('Ready') # DELETE
 
 while True:
     # If Mode button is pressed, get the next mode
-    # Modulo operation makes sure we loop aound the list
+    # Modulo operation makes sure we loop around the list
     if not mode_btn.value:
         curr_mode = modes[(modes.index(curr_mode)+1) % len(modes)]
 

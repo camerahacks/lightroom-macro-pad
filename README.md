@@ -22,9 +22,14 @@ Make sure you have these in the lib folder on your board:
 <a href="https://github.com/adafruit/Adafruit_CircuitPython_HID/blob/master/adafruit_hid/keycode.py" target="_blank">https://github.com/adafruit/Adafruit_CircuitPython_HID/blob/master/adafruit_hid/keycode.py</a>
 
 
-## Layout
+## Switch Layout
 
 More info coming
+
+```
+|     |   0   |   1   |   2   |
+|  6  |   3   |   4   |   5   |
+```
 
 ## 3D Printing
 
