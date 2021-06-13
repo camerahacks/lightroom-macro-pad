@@ -1,6 +1,6 @@
 # Adobe Lightroom Macro Pad
 
-This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 buttons or mechanical switches. One switch for choosing the mode and 6 switches to execute the macros/shortcuts.
+This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 buttons or mechanical switches. One switch for choosing the mode and 6 switches to execute the macros/shortcuts. You can modify the code and create your own shortcuts/macros.
 
 ![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/06/Lightroom_Macro_Pad_Mechanical_Switch-2.jpg "Pi Pico Macro Pad for Lightroom Classic")
 
@@ -36,6 +36,10 @@ This micro pad has 7 buttons. Buttons 0-5 are used for macros and button 6 is us
 ## 3D Printing
 
 Print the case in any material you choose. The bottom part is just pressure fit into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico. STL files can be found in the ```case``` folder.
+
+## Keycaps
+
+I'm using relegendable keycaps from X-keys (affiliate link: https://amzn.to/3gmbBYO) but you can use any keycap you'd like. I created a few icons so I can remember what each switch is mapped to.
 
 ## Wiring the Macro Pad
 
