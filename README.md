@@ -1,10 +1,10 @@
 # Adobe Lightroom Macro Pad
 
-Although this firmware is functional, this project is a work in progress.
-
 This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 buttons or mechanical switches. One switch for choosing the mode and 6 switches to execute the macros/shortcuts.
 
-It can be easily ported to other microcontrollers by modifying some variables
+Although the firmware for this project is functional, this is a work in progress.
+
+It can be easily ported to other microcontrollers by modifying a few variables.
 
 More pictures and details once the project moves along.
 
@@ -24,7 +24,7 @@ Make sure you have these in the lib folder on your board:
 
 ## Switch Layout
 
-More info coming
+This micro pad has 7 buttons. Buttons 0-5 are used for macros and button 6 is used for switching modes.
 
 ```
 |     |   0   |   1   |   2   |
@@ -33,9 +33,15 @@ More info coming
 
 ## 3D Printing
 
-More info coming
+STL files coming soon.
 
-## How to edit the code
+## Wiring the Macro Pad
+
+Connect one of the pins on the switches to one of the ground (GND) pins on the Raspberry Pi Pico. The switches don't have a polarity, so you can choose which pin is connected to GND. There is no right or wrong.
+
+Connect the other free pin on the switches to a corresponding GPIO pin on the Pico. Take note of which switch is connected to which GPIO pin so you can edit the firmware code accordingly. Again, there is no right or wrong here, you can pick any of the
+
+## How to edit ```code.py```
 
 Make changes to the code block below if you will be using different pins on your board
 
@@ -74,15 +80,8 @@ class Culling:
 
     def macros():
         # This is where you add the list of macros for this mode
-        # add as many macros as the number of macro buttons/switches
-        return [
-                oneToOneZoom,
-                goPrevious,
-                increaseFlag,
-                decreaseFlag,
-                goNext,
-                nothing
-                ]
+        # add as many macros as the number of buttons/switches
+        return [grid, increaseFlag, oneToOneZoom, goPrevious, decreaseFlag, goNext]
 ```
 
 The ```macros()``` method is a list of ```macro``` classes. List position 0 is triggered by button 0, list position 1 by button 1, and so on...
@@ -95,8 +94,27 @@ def init():
     global curr_mode
     global mode_macros
 
-    modes = [LibraryModule,Culling] # Edit this list
+    modes = [LibraryModule, Culling] # Edit this list
     curr_mode = modes[0]
     mode_macros = curr_mode.macros()
 ```
 
+## How to edit ```boot.py```
+
+The options below only work on CircuitPython 7.0.0 or higher.
+
+Disable the Raspberry Pi Pico mass storage device. This will prevent the Raspberry Pi Pico from showing as an additional drive on your computer.
+```python
+_DISABLEUSB = 1
+```
+
+To re-enable the Pico as a mass storage device. Open a serial monitor, enter REPL and execute the code below. You should see the Pico as storage drive on your computer again.
+```python
+import storage
+storage.enable_usb_drive()
+```
+
+Disable the console USB device, which means you won't be able to connect a serial monitor and enter REPL. If you disable REPL and USB Device (option above), you can lock yourself out of the board. ```boot.py``` has a built in failsafe option to push the Mode key during boot so you can regain console/REPL access. Make sure to test the Mode key on your macro pad before enabling this option. 
+```python
+_DISABLEREPL = 1
+```
