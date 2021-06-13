@@ -2,6 +2,8 @@
 
 This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 buttons or mechanical switches. One switch for choosing the mode and 6 switches to execute the macros/shortcuts.
 
+![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/06/Lightroom_Macro_Pad_Mechanical_Switch-2.jpg "Pi Pico Macro Pad for Lightroom Classic")
+
 Although the firmware for this project is functional, this is a work in progress.
 
 It can be easily ported to other microcontrollers by modifying a few variables.
@@ -36,6 +38,8 @@ This micro pad has 7 buttons. Buttons 0-5 are used for macros and button 6 is us
 STL files coming soon.
 
 ## Wiring the Macro Pad
+
+![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/06/Lightroom_Macro_Pad_Mechanical_Switch-6.jpg "Pi Pico Macro Pad for Lightroom Classic Wiring")
 
 Connect one of the pins on the switches to one of the ground (GND) pins on the Raspberry Pi Pico. The switches don't have a polarity, so you can choose which pin is connected to GND. There is no right or wrong.
 
