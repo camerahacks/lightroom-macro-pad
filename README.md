@@ -35,9 +35,7 @@ This micro pad has 7 buttons. Buttons 0-5 are used for macros and button 6 is us
 
 ## 3D Printing
 
-Print the case in any material you choose. The bottom part is just pressure fit into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico.
-
-<script src="https://embed.github.com/view/3d/camerahacks/lightroom-macro-pad/main/case/Macro%20Keeb%20Top.stl"></script>
+Print the case in any material you choose. The bottom part is just pressure fit into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico. STL files can be found in the ```case``` folder.
 
 ## Wiring the Macro Pad
 
