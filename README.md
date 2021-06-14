@@ -47,11 +47,11 @@ I'm using relegendable keycaps from X-keys (affiliate link: https://amzn.to/3gmb
 
 Connect one of the pins on the switches to one of the ground (GND) pins on the Raspberry Pi Pico. The switches don't have a polarity, so you can choose which pin is connected to GND. There is no right or wrong.
 
-Connect the other free pin on the switches to a corresponding GPIO pin on the Pico. Take note of which switch is connected to which GPIO pin so you can edit the firmware code accordingly. Again, there is no right or wrong here, you can pick any of the
+Connect the other free pin on the switches to a corresponding GPIO pin on the Pico. Take note of which switch is connected to which GPIO pin so you can edit the firmware code accordingly. Again, there is no right or wrong here, you can pick any of them.
 
 ## How to edit ```code.py```
 
-Make changes to the code block below if you will be using different pins on your board
+Make changes to the code block below if you will be using different pins on your board.
 
 ```python
 btn_0_pin = board.GP17
@@ -109,7 +109,7 @@ def init():
 
 ## How to edit ```boot.py```
 
-The options below only work on CircuitPython 7.0.0 or higher.
+The options below only work on CircuitPython 7.0.0 or higher, if you have a lower version, these settings will just be ignored.
 
 Disable the Raspberry Pi Pico mass storage device. This will prevent the Raspberry Pi Pico from showing as an additional drive on your computer.
 ```python
