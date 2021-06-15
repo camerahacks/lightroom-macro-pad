@@ -342,7 +342,7 @@ def init():
     global curr_mode
     global mode_macros
 
-    modes = [Culling,LibraryModule, Photoshop]
+    modes = [Culling,LibraryModule]
     curr_mode = modes[0]
     mode_macros = curr_mode.macros()
 
