@@ -91,7 +91,7 @@ mode_btn = btn_6
 # Global Variables
 # ------------------------
 
-_VERSION = 'v0.1'
+_VERSION = 'v0.2'
 
 _FREQUENCY = 0.1
 _DEBOUNCE = 0.05
