@@ -91,7 +91,7 @@ mode_btn = btn_6
 # Global Variables
 # ------------------------
 
-_VERSION = '0.0.2'
+_VERSION = 'v0.1'
 
 _FREQUENCY = 0.1
 _DEBOUNCE = 0.05
@@ -342,7 +342,7 @@ def init():
     global curr_mode
     global mode_macros
 
-    modes = [Culling,LibraryModule, Photoshop]
+    modes = [Culling,LibraryModule]
     curr_mode = modes[0]
     mode_macros = curr_mode.macros()
 
