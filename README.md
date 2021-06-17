@@ -26,7 +26,7 @@ Make sure you have these in the lib folder on your board:
 
 ## Switch Layout
 
-This micro pad has 7 buttons. Buttons 0-5 are used for macros and button 6 is used for switching modes.
+This macro pad has 7 buttons. Buttons 0-5 are used for macros and button 6 is used for switching modes.
 
 ```
 |     |   0   |   1   |   2   |
@@ -39,7 +39,7 @@ Print the case in any material you choose. The bottom part is just pressure fit 
 
 ## Keycaps
 
-I'm using relegendable keycaps from X-keys (affiliate link: https://amzn.to/3gmbBYO) but you can use any keycap you'd like. I created a few icons so I can remember what each switch is mapped to.
+I'm using relegendable keycaps from X-keys (affiliate link: https://amzn.to/3gmbBYO) but you can use any keycap you'd like. I created a few icons so I can remember what each switch is mapped to. The legend SVG file can be found in the ```/keycaps``` folder.
 
 ## Wiring the Macro Pad
 
@@ -111,18 +111,43 @@ def init():
 
 The options below only work on CircuitPython 7.0.0 or higher, if you have a lower version, these settings will just be ignored.
 
+### Disabe CIRCUITPY drive
+
 Disable the Raspberry Pi Pico mass storage device. This will prevent the Raspberry Pi Pico from showing as an additional drive on your computer.
 ```python
 _DISABLEUSB = 1
 ```
 
-To re-enable the Pico as a mass storage device. Open a serial monitor, enter REPL and execute the code below. You should see the Pico as storage drive on your computer again.
+The most graceful way to enable the CIRCUITPY mass storage device again is to enter REPL and run the code below. The extra line returns match the carriage returns needed to run this code block in REPL with the correct python indentation.
+
 ```python
 import storage
-storage.enable_usb_drive()
-```
+storage.remount("/", readonly=False)
+with open('boot.py') as f:
+    newText=f.read().replace('_DISABLEUSB = 1', '_DISABLEUSB = 0')
 
-Disable the console USB device, which means you won't be able to connect a serial monitor and enter REPL. If you disable REPL and USB Device (option above), you can lock yourself out of the board. ```boot.py``` has a built in failsafe option to push the Mode key during boot so you can regain console/REPL access. Make sure to test the Mode key on your macro pad before enabling this option. 
+
+
+with open('boot.py', 'w') as f:
+    f.write(newText)
+
+
+
+
+```
+Another option is to nuke the ```boot.py``` file altogether. Enter REPL and run the code below. Easier to run and to remember but definitely not as graceful.
+
+```python
+import os
+os.remove('boot.py')
+```
+A soft reset through REPL does not execute the ```boot.py``` file, you have to either bridge the RUN and GND pins or disconnect and connect the USB cable to make your board run the boot code.
+
+### Disable REPL
+
+Disable the console USB device, which means you won't be able to connect a serial monitor and enter REPL. If you disable REPL and USB Device (option above), you can lock yourself out of the board. So, make sure you know what you are doing before enabling both options
+
+```boot.py``` has a built-in failsafe option to push the Mode switch during boot so you can regain console/REPL access. Make sure to test the Mode key on your macro pad before enabling this option.
 ```python
 _DISABLEREPL = 1
 ```
