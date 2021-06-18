@@ -1,3 +1,5 @@
+More camera and photography related hacks @ [{DPHacks}](https://dphacks.com/how-to-canon-camera-control-api-ccapi/) Blog
+
 # Adobe Lightroom Macro Pad
 
 This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 buttons or mechanical switches. One switch for choosing the mode and 6 switches to execute the macros/shortcuts. You can modify the code and create your own shortcuts/macros.
