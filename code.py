@@ -1,11 +1,12 @@
 # ------------------------------------------------------------ #
 # Raspberry Pi Pico Lithroom Macro Pad
 # @author André Costa dphacks.com
-# @link dphacks.com
+# @website dphacks.com
 #
 # Refer to the License file for permissions to use and distribute
 # this software
 # Refer to the README file how to edit the macros in this code
+# This version of the code only runs on CircuitPython 7.0.0 and above
 # ------------------------------------------------------------ #
 
 # ------------------------
@@ -13,15 +14,15 @@
 # ------------------------
 
 import time
+import keypad
 import board
-import digitalio
+import usb_hid
 
 # ------------------------
 # Additional Libraries
 # These will have to be installed separately
 # ------------------------
 
-import usb_hid
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.mouse import Mouse
 from adafruit_hid.keycode import Keycode
@@ -32,69 +33,20 @@ from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 # ------------------------
 
 # LED - Pico's onboard lED is GP25
-led = digitalio.DigitalInOut(board.GP25)
-led.direction = digitalio.Direction.OUTPUT
-
-# Layout
-# -------------------------------#
-# |     |   0   |   1   |   2   |
-# -------------------------------#
-# | 6   |   3   |   4   |   5   |
-# -------------------------------#
-
-btn_0_pin = board.GP17
-btn_1_pin = board.GP4
-btn_2_pin = board.GP6
-btn_3_pin = board.GP10
-btn_4_pin = board.GP8
-btn_5_pin = board.GP14
-btn_6_pin = board.GP1
-
+# led = digitalio.DigitalInOut(board.GP25)
+# led.direction = digitalio.Direction.OUTPUT
 
 # Keyboard device.
 m = Mouse(usb_hid.devices)
 kbd = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(kbd)
 
-# Buttons/Switches
-btn_0 = digitalio.DigitalInOut(btn_0_pin)
-btn_0.direction = digitalio.Direction.INPUT
-btn_0.pull = digitalio.Pull.UP
-
-btn_1 = digitalio.DigitalInOut(btn_1_pin)
-btn_1.direction = digitalio.Direction.INPUT
-btn_1.pull = digitalio.Pull.UP
-
-btn_2 = digitalio.DigitalInOut(btn_2_pin)
-btn_2.direction = digitalio.Direction.INPUT
-btn_2.pull = digitalio.Pull.UP
-
-btn_3 = digitalio.DigitalInOut(btn_3_pin)
-btn_3.direction = digitalio.Direction.INPUT
-btn_3.pull = digitalio.Pull.UP
-
-btn_4 = digitalio.DigitalInOut(btn_4_pin)
-btn_4.direction = digitalio.Direction.INPUT
-btn_4.pull = digitalio.Pull.UP
-
-btn_5 = digitalio.DigitalInOut(btn_5_pin)
-btn_5.direction = digitalio.Direction.INPUT
-btn_5.pull = digitalio.Pull.UP
-
-btn_6 = digitalio.DigitalInOut(btn_6_pin)
-btn_6.direction = digitalio.Direction.INPUT
-btn_6.pull = digitalio.Pull.UP
-
-mode_btn = btn_6
-
 # ------------------------
 # Global Variables
 # ------------------------
 
-_VERSION = 'v0.2'
-
-_FREQUENCY = 0.1
-_DEBOUNCE = 0.05
+_VERSION = 'v0.5'
+_DEBOUNCE = 0.020
 
 # ------------------------
 # Mode Classes
@@ -333,78 +285,64 @@ class explorer:
         time.sleep(0.05)
         layout.write('explorer\n')
 
-# ------------------------
-# Functions
-# ------------------------
+# Define Macro Classes to load 
 
-def init():
-    global modes
-    global curr_mode
-    global mode_macros
-
-    modes = [Culling,LibraryModule]
-    curr_mode = modes[0]
-    mode_macros = curr_mode.macros()
-
-def debounce():
-    time.sleep(_DEBOUNCE)
+modes = [Culling,LibraryModule]
+curr_mode = modes[0]
+mode_macros = curr_mode.macros()
 
 # ------------------------
-# Boot Sequence
+# Pin and Keypad configuration
 # ------------------------
 
-init()
+# 7-Switch Layout
+# -------------------------------#
+# |     |   0   |   1   |   2   |
+# -------------------------------#
+# | 6   |   3   |   4   |   5   |
+# -------------------------------#
 
-# Flash the LED when boot is complete
-for x in range(0, 5):
+# 10-Switch Layout
+# -------------------------------#
+# |     |   0   |   1   |   2   |
+# -------------------------------#
+# |     |   3   |   4   |   5   |
+# -------------------------------#
+# | 9   |   6   |   7   |   8   |
 
-	led.value = False
-	time.sleep(0.2)
-	led.value = True
-	time.sleep(0.2)
+# This part is commented for now. Only used if a diode matrix is in use
 
-led.value = False
+#km = keypad.KeyMatrix(
+#    row_pins=(board.GP17, board.GP4, board.GP6),
+#    col_pins=(board.GP10, board.GP8))
 
-print('Ready') # DELETE
+#             SW0         SW1        SW2        SW3         SW4        SW5         SW6      #  
+board_pins = (board.GP17, board.GP4, board.GP6, board.GP10, board.GP8, board.GP14, board.GP1)
 
-# ------------------------
-# Main Loop
-# ------------------------
+k = keypad.Keys(pins=board_pins, value_when_pressed=False, pull=True, interval=_DEBOUNCE)
+
+# Mode switch/pin
+MODE_SW = keypad.Event(6, True) # 7-switch layout
+
+#MODE_SW = keypad.Event(9, True) # 10-switch layout
 
 while True:
-    # If Mode button is pressed, get the next mode
-    # Modulo operation makes sure we loop around the list
-    if not mode_btn.value:
-        curr_mode = modes[(modes.index(curr_mode)+1) % len(modes)]
+    # This part is commented for now. Only used if a diode matrix is in use
+    #km_event = km.events.next()
+    #if km_event:
+        #print(len(km.events), "events queued")
+        #print("matrix", km_event)
 
+    k_event = k.events.get()
+
+    if k_event == MODE_SW:
+        # Change mode
+        curr_mode = modes[(modes.index(curr_mode)+1) % len(modes)]
         # Load up the mode macros
         mode_macros = curr_mode.macros()
-        
         print(curr_mode) #DELETE
-        debounce()
-
-    if not btn_0.value:
-        mode_macros[0].macro()
-        debounce()
-
-    if not btn_1.value:
-        mode_macros[1].macro()
-        debounce()
-
-    if not btn_2.value:
-        mode_macros[2].macro()
-        debounce()
-
-    if not btn_3.value:
-        mode_macros[3].macro()
-        debounce()
-
-    if not btn_4.value:
-        mode_macros[4].macro()
-        debounce()
-
-    if not btn_5.value:
-        mode_macros[5].macro()
-        debounce()
-
-    time.sleep(_FREQUENCY)
+    
+    elif k_event and k_event.pressed:
+        #print("keys", k_event.key_number, k_event.pressed)
+        mode_macros[k_event.key_number].macro()
+        print(mode_macros[k_event.key_number].macroName()) #DELETE

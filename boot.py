@@ -25,7 +25,8 @@ except ImportError:
 # Definitions
 # ------------------------
 
-button = digitalio.DigitalInOut(board.GP0) #
+#Edit the pin number. This pin/button is used to disable features at boot time
+button = digitalio.DigitalInOut(board.GP0)
 button.direction = digitalio.Direction.INPUT
 button.pull = digitalio.Pull.UP
 
@@ -35,7 +36,7 @@ CPVersion = tuple(map(int, os.uname().release.split('.')))
 # Disabling USB drive and REPL can lock you out of your board.
 # These settings will prevent your board from showing as a USB
 # drive and REPL will be disabled.
-# Make sure your "fail safe" button is working before
+# Make sure your "fail safe" button is working before (configured above)
 # disabling REPL. Do this at your own risk.
 
 _DISABLEUSB = 0 # Set to 1 to disable USB drive

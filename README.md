@@ -25,17 +25,39 @@ Make sure you have these in the lib folder on your board:
 
 <a href="https://github.com/adafruit/Adafruit_CircuitPython_HID/blob/master/adafruit_hid/keycode.py" target="_blank">https://github.com/adafruit/Adafruit_CircuitPython_HID/blob/master/adafruit_hid/keycode.py</a>
 
+## Versions (READ THIS)
+
+V0.1 works on CircuitPython 6.2.0 and above
+
+V0.5 (in progress/main branch) will transition to Circuit Python's new Keypad API that allows key pin and matrix scans. This feature is only available in Circuit Python 7.0.0, which is in Alpha right now, but the Keypad API is stable and works really well.
+
+If you don't want to deal with Alpha software, just download lightroom-macro-pad v0.1. If you want the latest and greatest, the ```main``` branch is what you want, just make sure you have Circuit Python 7.0.0 on your board.
+
+## Coming Soon - Wishlist
+
+* Support 10-Switch layout
+* Ability to scan a diode matrix
+* Possibly, an open source PCB
 
 ## Switch Layout
 
-This macro pad has 7 buttons. Buttons 0-5 are used for macros and button 6 is used for switching modes.
+Case layout is already available for the 7 switch layout. I'm working on a case for the 10 switch layout. 
+
+7-switch: Switches 0-5 are used for macros and switch 6 is used for switching modes.
 
 ```
 |     |   0   |   1   |   2   |
 |  6  |   3   |   4   |   5   |
 ```
 
-## 3D Printing
+10-switch: Switches 0-8 are used for macros and switch 9 is used for switching modes.
+```
+|     |   0   |   1   |   2   |
+|     |   3   |   4   |   5   |
+|  9  |   6   |   7   |   8   |
+```
+
+## 3D Printing/ Case
 
 Print the case in any material you choose. The bottom part is just pressure fit into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico. STL files can be found in the ```case``` folder.
 
@@ -53,6 +75,7 @@ Connect the other free pin on the switches to a corresponding GPIO pin on the Pi
 
 ## How to edit ```code.py```
 
+### v0.1
 Make changes to the code block below if you will be using different pins on your board.
 
 ```python
@@ -64,6 +87,16 @@ btn_4_pin = board.GP27
 btn_5_pin = board.GP21
 btn_6_pin = board.GP0
 ```
+
+### v0.5 (in progress/main branch)
+Make changes to the code block below if you will be using different pins on your board.
+
+```python
+#             SW0         SW1        SW2        SW3         SW4        SW5         SW6      #  
+board_pins = (board.GP17, board.GP4, board.GP6, board.GP10, board.GP8, board.GP14, board.GP1)
+```
+
+### All Versions
 
 You can also add more macros/shortcuts. Each shortcut is its own class, just make sure to structure the class like the example below.
 
@@ -99,14 +132,9 @@ The ```macros()``` method is a list of ```macro``` classes. List position 0 is t
 Finally, add the list of ```modes``` to the ```init()``` function.
 
 ```python
-def init():
-    global modes
-    global curr_mode
-    global mode_macros
-
-    modes = [LibraryModule, Culling] # Edit this list
-    curr_mode = modes[0]
-    mode_macros = curr_mode.macros()
+modes = [LibraryModule, Culling] # Edit this list
+curr_mode = modes[0]
+mode_macros = curr_mode.macros()
 ```
 
 ## How to edit ```boot.py```
