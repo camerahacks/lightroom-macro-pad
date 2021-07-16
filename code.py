@@ -77,7 +77,7 @@ class Culling:
         return 'Culling Shortcuts'
     
     def color():
-        return ''
+        return 'red'
 
     def macros():
         # This is where you add the list of macros for this mode
@@ -89,7 +89,7 @@ class LibraryModule:
         return 'Library Module Shortcuts'
 
     def color():
-        return ''
+        return 'green'
 
     def macros():
         return [grid, increaseFlag, editKeywords, loupe, decreaseFlag, virtualCopy]
@@ -100,7 +100,7 @@ class Photoshop:
         return 'Photoshop Shortcuts'
 
     def color():
-        return ''
+        return 'blue'
 
     def macros():
         return [nothing, nothing, nothing, nothing, nothing, nothing]
@@ -158,6 +158,14 @@ class virtualCopy:
 
     def macro():
         kbd.send(Keycode.CONTROL, Keycode.QUOTE)
+
+class toggleFilters:
+
+    def macroName():
+        return 'Toggle Filters On/Off'
+
+    def macro():
+        kbd.send(Keycode.CONTROL, Keycode.L)
 
 ### Module Specific Shortcuts ###
 
@@ -287,9 +295,11 @@ class explorer:
 
 # Define Macro Classes to load 
 
-modes = [Culling,LibraryModule]
+modes = [Culling,LibraryModule,Photoshop]
 curr_mode = modes[0]
 mode_macros = curr_mode.macros()
+mode_color = curr_mode.color()
+
 
 # ------------------------
 # Pin and Keypad configuration
@@ -316,15 +326,15 @@ mode_macros = curr_mode.macros()
 #    row_pins=(board.GP17, board.GP4, board.GP6),
 #    col_pins=(board.GP10, board.GP8))
 
-#             SW0         SW1        SW2        SW3         SW4        SW5         SW6      #  
-board_pins = (board.GP17, board.GP4, board.GP6, board.GP10, board.GP8, board.GP14, board.GP1)
+# Pi Pico     SW0        SW1        SW2        SW3        SW4        SW5        SW6         SW7         SW8         SW9       #
+board_pins = (board.GP0, board.GP1, board.GP2, board.GP6, board.GP8, board.GP7, board.GP11, board.GP13, board.GP12, board.GP16)
 
 k = keypad.Keys(pins=board_pins, value_when_pressed=False, pull=True, interval=_DEBOUNCE)
 
 # Mode switch/pin
-MODE_SW = keypad.Event(6, True) # 7-switch layout
+#MODE_SW = keypad.Event(6, True) # 7-switch layout
 
-#MODE_SW = keypad.Event(9, True) # 10-switch layout
+MODE_SW = keypad.Event(9, True) # 10-switch layout
 
 while True:
     # This part is commented for now. Only used if a diode matrix is in use
@@ -343,6 +353,6 @@ while True:
         print(curr_mode) #DELETE
     
     elif k_event and k_event.pressed:
-        #print("keys", k_event.key_number, k_event.pressed)
+        #print("keys", k_event.key_number, k_event.pressed) #DELETE
         mode_macros[k_event.key_number].macro()
         print(mode_macros[k_event.key_number].macroName()) #DELETE
