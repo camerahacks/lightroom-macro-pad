@@ -2,6 +2,7 @@
 # Raspberry Pi Pico Lithroom Macro Pad
 # @author André Costa dphacks.com
 # @website dphacks.com
+
 #
 # Refer to the License file for permissions to use and distribute
 # this software
@@ -82,7 +83,7 @@ class Culling:
     def macros():
         # This is where you add the list of macros for this mode
         # add as many macros as the number of buttons/switches
-        return [grid, increaseFlag, oneToOneZoom, goPrevious, decreaseFlag, goNext]
+        return [grid, oneToOneZoom, crop, loupe, increaseFlag, toggleFilters, goPrevious, decreaseFlag, goNext]
 
 class LibraryModule:
     def name():
@@ -92,7 +93,7 @@ class LibraryModule:
         return 'green'
 
     def macros():
-        return [grid, increaseFlag, editKeywords, loupe, decreaseFlag, virtualCopy]
+        return [grid, editKeywords, crop, nothing, increaseFlag, nothing, loupe, decreaseFlag, virtualCopy]
 
 class Photoshop:
 
@@ -166,6 +167,14 @@ class toggleFilters:
 
     def macro():
         kbd.send(Keycode.CONTROL, Keycode.L)
+
+class crop:
+
+    def macroName():
+        return 'Crop Photo'
+
+    def macro():
+        kbd.send(Keycode.R)
 
 ### Module Specific Shortcuts ###
 
