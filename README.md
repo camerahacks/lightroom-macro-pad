@@ -2,7 +2,7 @@ More camera and photography related hacks @ [{DPHacks}](https://dphacks.com/how-
 
 # Adobe Lightroom Macro Pad
 
-This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 buttons or mechanical switches. One switch for choosing the mode and 6 switches to execute the macros/shortcuts. You can modify the code and create your own shortcuts/macros.
+This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 or 10 buttons or mechanical switches. One switch for choosing the mode and the other switches to execute the macros/shortcuts. You can modify the code and create your own shortcuts/macros.
 
 ![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/06/Lightroom_Macro_Pad_Mechanical_Switch-2.jpg "Pi Pico Macro Pad for Lightroom Classic")
 
@@ -29,14 +29,14 @@ Make sure you have these in the lib folder on your board:
 
 V0.1 works on CircuitPython 6.2.0 and above
 
-V0.5 (in progress/main branch) will transition to Circuit Python's new Keypad API that allows key pin and matrix scans. This feature is only available in Circuit Python 7.0.0, which is in Alpha right now, but the Keypad API is stable and works really well.
+V0.5 (in progress/main branch) will transition to Circuit Python's new Keypad API that allows key pin and matrix scans. This feature is only available in Circuit Python 7.0.0, which is in Beta right now, but the Keypad API is stable and works really well.
 
-If you don't want to deal with Alpha software, just download lightroom-macro-pad v0.1. If you want the latest and greatest, the ```main``` branch is what you want, just make sure you have Circuit Python 7.0.0 on your board.
+If you don't want to deal with Beta software, just download lightroom-macro-pad v0.1. If you want the latest and greatest, the ```main``` branch is what you want, just make sure you have Circuit Python 7.0.0 on your board.
 
 ## Coming Soon - Wishlist
 
-* Support 10-Switch layout
-* Ability to scan a diode matrix
+* ~~Support 10-Switch layout~~ (done)
+* ~~Ability to scan a diode matrix~~ (main branch)
 * Possibly, an open source PCB
 
 ## Switch Layout
@@ -65,7 +65,7 @@ Print the case in any material you choose. The bottom part is just pressure fit 
 
 I'm using relegendable keycaps from X-keys (affiliate link: https://amzn.to/3gmbBYO) but you can use any keycap you'd like. I created a few icons so I can remember what each switch is mapped to. The legend SVG file can be found in the ```/keycaps``` folder.
 
-## Wiring the Macro Pad
+## Wiring the Macro Pad (Handwire version)
 
 ![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/06/Lightroom_Macro_Pad_Mechanical_Switch-6.jpg "Pi Pico Macro Pad for Lightroom Classic Wiring")
 
