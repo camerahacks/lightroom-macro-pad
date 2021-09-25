@@ -71,6 +71,15 @@ Connect one of the pins on the switches to one of the ground (GND) pins on the R
 
 Connect the other free pin on the switches to a corresponding GPIO pin on the Pico. Take note of which switch is connected to which GPIO pin so you can edit the firmware code accordingly. Again, there is no right or wrong here, you can pick any of them.
 
+## PCB
+
+I created a simple PCB that makes the whole process a lot more plug and play. Creating these things actually takes a lot of time so I'm not releasing the PCB as open source just yet. If you are interested, you can send me message through GitHub or through my website's [Contact Form](https://dphacks.com/contact/) and I might have some PCBs available for you for a small fee.
+
+![Lightroom Macro Pad - PCB](https://dphacks.com/wp-content/uploads/2021/09/10_Switch_LR_Macro_Pad-2.jpg "Lightroom Macro Pad - PCB")
+
+![Lightroom Macro Pad - PCB](https://dphacks.com/wp-content/uploads/2021/09/10_Switch_LR_Macro_Pad-3.jpg "Lightroom Macro Pad - PCB")
+
+
 ## How to edit ```code.py```
 
 ### v0.1
