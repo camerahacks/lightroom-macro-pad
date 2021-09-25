@@ -57,7 +57,11 @@ V0.5 (in progress/main branch) transitions to Circuit Python's new Keypad API th
 
 ## 3D Printing/ Case
 
-Print the case in any material you choose. The bottom part on the 7-switch layout is just pressure fitted into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico. STL files can be found in the ```case``` folder.
+Print the case in any material you choose. The bottom part on the 7-switch layout is just pressure fitted into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico. The 10-switch case uses round magnets to snap the case parts together. Here is a link to the magnets I used: https://amzn.to/3CPtB5V (affiliate link)
+
+The case uses standard MX spacing, meaning you can use any MX compatible switches and keycaps.
+
+STL and 3mf files can be found in the ```case``` folder.
 
 ## Keycaps
 
