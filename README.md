@@ -2,15 +2,15 @@ More camera and photography related hacks @ [{DPHacks}](https://dphacks.com/) Bl
 
 # Adobe Lightroom Macro Pad
 
-This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 or 10 buttons or mechanical switches. One switch for choosing the mode and the other switches to execute the macros/shortcuts. You can modify the code and create your own shortcuts/macros.
+This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 or 10 mechanical switches. One switch for choosing the mode and the other switches to execute the macros/shortcuts. You can modify the code and create your own shortcuts/macros.
 
 ![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/09/10_Switch_LR_Macro_Pad-1.jpg "Pi Pico Macro Pad for Lightroom Classic")
 
-Although the firmware for this project is functional, this is a work in progress.
+Although the firmware for this project is functional, this is a work in progress. If you find any bugs or issues, please let me know.
 
-It can be easily ported to other microcontrollers by modifying a few variables.
+It can be easily ported to other microcontrollers by modifying a few variables. For example, I'm creating a macro pad to be used with Pimoroni's Tiny 2040 board.
 
-More pictures and details once the project moves along.
+I periodically add more pictures and details so it is easier for other folks to create their own macro pad.
 
 ## Lightroom Classic Shortcut Reference
 
@@ -39,7 +39,7 @@ V0.5 (in progress/main branch) transitions to Circuit Python's new Keypad API th
 
 ## Switch Layout
 
-Case layout is already available for the 7 switch layout. I'm working on a case for the 10 switch layout. 
+3D printable files are available for both layouts. 
 
 7-switch: Switches 0-5 are used for macros and switch 6 is used for switching modes.
 
@@ -57,7 +57,7 @@ Case layout is already available for the 7 switch layout. I'm working on a case 
 
 ## 3D Printing/ Case
 
-Print the case in any material you choose. The bottom part is just pressure fit into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico. STL files can be found in the ```case``` folder.
+Print the case in any material you choose. The bottom part on the 7-switch layout is just pressure fitted into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico. STL files can be found in the ```case``` folder.
 
 ## Keycaps
 
@@ -67,7 +67,7 @@ I'm using relegendable keycaps from X-keys (affiliate link: https://amzn.to/3gmb
 
 ![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/06/Lightroom_Macro_Pad_Mechanical_Switch-6.jpg "Pi Pico Macro Pad for Lightroom Classic Wiring")
 
-Connect one of the pins on the switches to one of the ground (GND) pins on the Raspberry Pi Pico. The switches don't have a polarity, so you can choose which pin is connected to GND. There is no right or wrong.
+Connect one of the pins on the switches to one of the ground (GND) pins on the Raspberry Pi Pico. The switches don't have a polarity, so you can choose which pin is connected to GND. There is no right or wrong. You can see in the picture above that all of the GND pins on the switches are connected with the white wire. The white wire is then connected to a GND pin on the Pico.
 
 Connect the other free pin on the switches to a corresponding GPIO pin on the Pico. Take note of which switch is connected to which GPIO pin so you can edit the firmware code accordingly. Again, there is no right or wrong here, you can pick any of them.
 
@@ -82,7 +82,16 @@ I created a simple PCB that makes the whole process a lot more plug and play. Cr
 
 ## How to edit ```code.py```
 
-### v0.1
+
+### v0.5 (in progress/main branch)
+Make changes to the code block below if you will be using different pins on your board.
+
+```python
+#             SW0         SW1        SW2        SW3         SW4        SW5         SW6      #  
+board_pins = (board.GP17, board.GP4, board.GP6, board.GP10, board.GP8, board.GP14, board.GP1)
+```
+
+### v0.1 (older version of this firmware)
 Make changes to the code block below if you will be using different pins on your board.
 
 ```python
@@ -93,14 +102,6 @@ btn_3_pin = board.GP10
 btn_4_pin = board.GP27
 btn_5_pin = board.GP21
 btn_6_pin = board.GP0
-```
-
-### v0.5 (in progress/main branch)
-Make changes to the code block below if you will be using different pins on your board.
-
-```python
-#             SW0         SW1        SW2        SW3         SW4        SW5         SW6      #  
-board_pins = (board.GP17, board.GP4, board.GP6, board.GP10, board.GP8, board.GP14, board.GP1)
 ```
 
 ### All Versions
@@ -126,7 +127,7 @@ class Culling:
         return 'Culling Shortcuts'
     
     def color():
-        return ''
+        return '' # Color is not yet implemented
 
     def macros():
         # This is where you add the list of macros for this mode
@@ -139,7 +140,7 @@ The ```macros()``` method is a list of ```macro``` classes. List position 0 is t
 Finally, add the list of ```modes``` to the ```init()``` function.
 
 ```python
-modes = [LibraryModule, Culling] # Edit this list
+modes = [LibraryModule, Culling] # Edit this list with the mode classes
 curr_mode = modes[0]
 mode_macros = curr_mode.macros()
 ```
@@ -178,7 +179,7 @@ Another option is to nuke the ```boot.py``` file altogether. Enter REPL and run 
 import os
 os.remove('boot.py')
 ```
-A soft reset through REPL does not execute the ```boot.py``` file, you have to either bridge the RUN and GND pins or disconnect and connect the USB cable to make your board run the boot code.
+A soft reset through REPL does not execute the ```boot.py``` file, you have to either bridge the RUN and GND pins OR disconnect and reconnect the USB cable to make your board run the boot code.
 
 ### Disable REPL
 
