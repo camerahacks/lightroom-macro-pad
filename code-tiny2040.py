@@ -69,7 +69,7 @@ class TestMode:
     def macros():
         # This is where you add the list of macros for this mode
         # add as many macros as the number of buttons/switches.
-        return [nothing, nothing, nothing, nothing, nothing, nothing]
+        return [nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing]
 
 class Culling:
     
@@ -82,7 +82,7 @@ class Culling:
     def macros():
         # This is where you add the list of macros for this mode
         # add as many macros as the number of buttons/switches
-        return [grid, increaseFlag, oneToOneZoom, goPrevious, decreaseFlag, goNext]
+        return [grid, increaseFlag, oneToOneZoom, goPrevious, decreaseFlag, goNext, nothing, nothing, nothing]
 
 class LibraryModule:
     def name():
@@ -92,7 +92,7 @@ class LibraryModule:
         return 'green'
 
     def macros():
-        return [grid, increaseFlag, editKeywords, loupe, decreaseFlag, virtualCopy]
+        return [grid, increaseFlag, editKeywords, loupe, decreaseFlag, virtualCopy, nothing, nothing, nothing]
 
 class Photoshop:
 
@@ -330,8 +330,8 @@ mode_color = curr_mode.color()
 # Board Specific
 # ------------------------
 
-# Tiny 2040   SW0        SW1        SW2        SW3        SW4        SW5        SW6        SW7        SW8         SW9       #
-board_pins = (board.GP0, board.GP1, board.GP2, board.GP3, board.GP4, board.GP5, board.GP6, board.GP7, board.GP29, board.GP26)
+# Tiny 2040   SW0       SW1       SW2       SW3        SW4        SW5       SW6        SW7        SW8        SW9      #
+board_pins = (board.A1, board.A2, board.A3, board.GP6, board.GP7, board.A0, board.GP3, board.GP4, board.GP5, board.GP2)
 
 # Tiny 2040 LED Pins
 colors = {'red':board.LED_R, 'green':board.LED_G, 'blue':board.LED_B}

@@ -2,13 +2,13 @@ More camera and photography related hacks @ [{DPHacks}](https://dphacks.com/) Bl
 
 # Adobe Lightroom Macro Pad
 
-This is a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython. It's designed to work with 7 or 10 mechanical switches. One switch for choosing the mode and the other switches to execute the macros/shortcuts. You can modify the code and create your own shortcuts/macros.
+This project started as a Raspberry Pi Pico Lightroom Macro Pad based on CircuitPython but it is growing to include other controllers. It's designed to work with 7 or 10 mechanical switches. One switch for choosing the mode and the other switches to execute the macros/shortcuts. You can modify the code and create your own shortcuts/macros.
 
 ![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/09/10_Switch_LR_Macro_Pad-1.jpg "Pi Pico Macro Pad for Lightroom Classic")
 
 Although the firmware for this project is functional, this is a work in progress. If you find any bugs or issues, please let me know.
 
-It can be easily ported to other microcontrollers by modifying a few variables. For example, I'm creating a macro pad to be used with Pimoroni's Tiny 2040 board.
+It can be easily ported to other microcontrollers by modifying a few variables. For example, I've since created a macro pad to be used with Pimoroni's Tiny 2040 board.
 
 I periodically add more pictures and details so it is easier for other folks to create their own macro pad.
 
@@ -35,7 +35,7 @@ V0.5 (in progress/main branch) transitions to Circuit Python's new Keypad API th
 
 * ~~Support 10-Switch layout~~ (done)
 * ~~Ability to scan a diode matrix~~ (main branch)
-* Possibly, an open source PCB
+* ~~Pimoroni Tiny 2020 Case~~ (done)
 
 ## Switch Layout
 
@@ -57,7 +57,9 @@ V0.5 (in progress/main branch) transitions to Circuit Python's new Keypad API th
 
 ## 3D Printing/ Case
 
-Print the case in any material you choose. The bottom part on the 7-switch layout is just pressure fitted into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico. The 10-switch case uses round magnets to snap the case parts together. Here is a link to the magnets I used: https://amzn.to/3CPtB5V (affiliate link)
+Print the case in any material you choose. The bottom part on the 7-switch layout is just pressure fitted into the top piece using a 0.1mm tolerance. The bottom also has stand-offs for fitting the Pico.
+
+The 10-switch case uses round magnets to snap the case parts together. Here is a link to the magnets I used: https://amzn.to/3CPtB5V (affiliate link), they are 5x2mm (diameter x thickness) magnets.
 
 The case uses standard MX spacing, meaning you can use any MX compatible switches and keycaps.
 
@@ -77,7 +79,9 @@ Connect the other free pin on the switches to a corresponding GPIO pin on the Pi
 
 ## PCB
 
-I created a simple PCB that makes the whole process a lot more plug and play. Creating these things actually takes a lot of time so I'm not releasing the PCB as open source just yet. If you are interested, you can send me message through GitHub or through my website's [Contact Form](https://dphacks.com/contact/) and I might have some PCBs available for you for a small fee.
+I created a simple PCB that makes the whole process a lot more plug and play. Creating these things actually takes a lot of time so I'm not releasing the PCB as open source just yet. If you are interested, you can head over to the <a href="https://www.etsy.com/shop/DPHacks" target="_blank">Etsy store</a> I setup to sell some electronic related items.
+
+Just like the case, the PCB has MX spacing. I'll be releasing a 3D model of the PCB so you can design your own case if needed.
 
 ![Lightroom Macro Pad - PCB](https://dphacks.com/wp-content/uploads/2021/09/10_Switch_LR_Macro_Pad-2.jpg "Lightroom Macro Pad - PCB")
 
