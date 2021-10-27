@@ -95,8 +95,8 @@ Just like the case, the PCB has MX spacing. I'll be releasing a 3D model of the 
 Make changes to the code block below if you will be using different pins on your board.
 
 ```python
-#             SW0         SW1        SW2        SW3         SW4        SW5         SW6      #  
-board_pins = (board.GP17, board.GP4, board.GP6, board.GP10, board.GP8, board.GP14, board.GP1)
+# Pi Pico     SW0        SW1        SW2        SW3        SW4        SW5        SW6         SW7         SW8         SW9       #
+board_pins = (board.GP0, board.GP1, board.GP2, board.GP6, board.GP8, board.GP7, board.GP11, board.GP13, board.GP12, board.GP16)
 ```
 
 ### v0.1 (older version of this firmware)
@@ -135,12 +135,12 @@ class Culling:
         return 'Culling Shortcuts'
     
     def color():
-        return '' # Color is not yet implemented
+        return 'red'
 
     def macros():
         # This is where you add the list of macros for this mode
         # add as many macros as the number of buttons/switches
-        return [grid, increaseFlag, oneToOneZoom, goPrevious, decreaseFlag, goNext]
+        return [grid, oneToOneZoom, crop, loupe, increaseFlag, toggleFilters, goPrevious, decreaseFlag, goNext]
 ```
 
 The ```macros()``` method is a list of ```macro``` classes. List position 0 is triggered by button 0, list position 1 by button 1, and so on...
