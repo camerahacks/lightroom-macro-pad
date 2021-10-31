@@ -27,11 +27,11 @@ Make sure you have these in the lib folder on your board:
 
 ## Versions (READ THIS)
 
-V0.1 works on CircuitPython 6.2.0 and above
+V0.7 Complete rework of the macro setup. It's much easier to edit and create macros. Macro configuration now lives in ```config.py```
 
 V0.5 (in progress/main branch) transitions to Circuit Python's new Keypad API that allows key pin and matrix scans. This feature is only available in Circuit Python 7.0.0.
 
-V0.7 Complete rework of the macro setup. It's much easier to edit and create macros. Macro configuration now lives in ```config.py```
+V0.1 works on CircuitPython 6.2.0 and above
 
 ## Coming Soon - Wishlist
 
