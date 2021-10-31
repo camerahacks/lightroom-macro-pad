@@ -8,7 +8,7 @@ This project started as a Raspberry Pi Pico Lightroom Macro Pad based on Circuit
 
 Although the firmware for this project is functional, this is a work in progress. If you find any bugs or issues, please let me know.
 
-It can be easily ported to other microcontrollers by modifying a few variables. For example, I've since created a macro pad to be used with Pimoroni's Tiny 2040 board.
+It can be easily ported to other microcontrollers by modifying a few variables in ```config.py```. For example, I've since created a macro pad to be used with Pimoroni's Tiny 2040 board.
 
 I periodically add more pictures and details so it is easier for other folks to create their own macro pad.
 
@@ -31,10 +31,12 @@ V0.1 works on CircuitPython 6.2.0 and above
 
 V0.5 (in progress/main branch) transitions to Circuit Python's new Keypad API that allows key pin and matrix scans. This feature is only available in Circuit Python 7.0.0.
 
+V0.7 Complete rework of the macro setup. It's much easier to edit and create macros. Macro configuration now lives in ```config.py```
+
 ## Coming Soon - Wishlist
 
 * ~~Support 10-Switch layout~~ (done)
-* ~~Ability to scan a diode matrix~~ (main branch)
+* Ability to scan a diode matrix (WIP)
 * ~~Pimoroni Tiny 2020 Case~~ (done)
 
 ## Switch Layout
@@ -69,14 +71,6 @@ STL and 3mf files can be found in the ```case``` folder.
 
 I'm using relegendable keycaps from X-keys (affiliate link: https://amzn.to/3gmbBYO) but you can use any keycap you'd like. I created a few icons so I can remember what each switch is mapped to. The legend SVG file can be found in the ```/keycaps``` folder.
 
-## Wiring the Macro Pad (Handwire version)
-
-![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/06/Lightroom_Macro_Pad_Mechanical_Switch-6.jpg "Pi Pico Macro Pad for Lightroom Classic Wiring")
-
-Connect one of the pins on the switches to one of the ground (GND) pins on the Raspberry Pi Pico. The switches don't have a polarity, so you can choose which pin is connected to GND. There is no right or wrong. You can see in the picture above that all of the GND pins on the switches are connected with the white wire. The white wire is then connected to a GND pin on the Pico.
-
-Connect the other free pin on the switches to a corresponding GPIO pin on the Pico. Take note of which switch is connected to which GPIO pin so you can edit the firmware code accordingly. Again, there is no right or wrong here, you can pick any of them.
-
 ## PCB
 
 I created a simple PCB that makes the whole process a lot more plug and play. Creating these things actually takes a lot of time so I'm not releasing the PCB as open source just yet. If you are interested, you can head over to the <a href="https://www.etsy.com/shop/DPHacks" target="_blank">Etsy store</a> I setup to sell some electronic related items.
@@ -87,11 +81,20 @@ Just like the case, the PCB has MX spacing. I'll be releasing a 3D model of the 
 
 ![Lightroom Macro Pad - PCB](https://dphacks.com/wp-content/uploads/2021/09/10_Switch_LR_Macro_Pad-3.jpg "Lightroom Macro Pad - PCB")
 
+## Wiring the Macro Pad (Handwire version)
 
-## How to edit ```code.py```
+![Lightroom Macro Pad - Raspberry Pi Pico](https://dphacks.com/wp-content/uploads/2021/06/Lightroom_Macro_Pad_Mechanical_Switch-6.jpg "Pi Pico Macro Pad for Lightroom Classic Wiring")
 
+Connect one of the pins on the switches to one of the ground (GND) pins on the Raspberry Pi Pico. The switches don't have a polarity, so you can choose which pin is connected to GND. There is no right or wrong. You can see in the picture above that all of the GND pins on the switches are connected with the white wire. The white wire is then connected to a GND pin on the Pico.
 
-### v0.5 (in progress/main branch)
+Connect the other free pin on the switches to a corresponding GPIO pin on the Pico. Take note of which switch is connected to which GPIO pin so you can edit the firmware code accordingly. Again, there is no right or wrong here, you can pick any of them.
+
+## How to edit ```config.py```
+
+### Starting with v0.7
+
+Starting with version 0.7 the board pin and macro configuration are done in ```config.py```. You shouldn't have to make any changes to ```code.py```
+
 Make changes to the code block below if you will be using different pins on your board.
 
 ```python
@@ -99,58 +102,41 @@ Make changes to the code block below if you will be using different pins on your
 board_pins = (board.GP0, board.GP1, board.GP2, board.GP6, board.GP8, board.GP7, board.GP11, board.GP13, board.GP12, board.GP16)
 ```
 
-### v0.1 (older version of this firmware)
-Make changes to the code block below if you will be using different pins on your board.
+Next, edit the code block below. (I'm working on creating a web based tool that will create ```config.py``` for you)
+
+The example below has two modes: Culling and Library. Each mode has 9 macros configured since the keypad has 9 switches.
 
 ```python
-btn_0_pin = board.GP17
-btn_1_pin = board.GP4
-btn_2_pin = board.GP6
-btn_3_pin = board.GP10
-btn_4_pin = board.GP27
-btn_5_pin = board.GP21
-btn_6_pin = board.GP0
-```
-
-### All Versions
-
-You can also add more macros/shortcuts. Each shortcut is its own class, just make sure to structure the class like the example below.
-
-```python
-class increaseFlag:
-    
-    def macroName():
-        return 'Increase Flag Status'
-    
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.UP_ARROW) # Shortcut key combination
-```
-
-Once you have all the shortcut classes created, you can edit existing ```modes``` by altering or creating new classes following the format below.
-
-```python
-class Culling:
-    
-    def name():
-        return 'Culling Shortcuts'
-    
-    def color():
-        return 'red'
-
-    def macros():
-        # This is where you add the list of macros for this mode
-        # add as many macros as the number of buttons/switches
-        return [grid, oneToOneZoom, crop, loupe, increaseFlag, toggleFilters, goPrevious, decreaseFlag, goNext]
-```
-
-The ```macros()``` method is a list of ```macro``` classes. List position 0 is triggered by button 0, list position 1 by button 1, and so on...
-
-Finally, add the list of ```modes``` to the ```init()``` function.
-
-```python
-modes = [LibraryModule, Culling] # Edit this list with the mode classes
-curr_mode = modes[0]
-mode_macros = curr_mode.macros()
+configvar = [{"name":"Culling", # Mode Name
+            "color":"red", # Mode Color, only used on devices with RGB led
+            "macros":
+                    [
+                    {"Name":"grid", "keycomb":[Keycode.G]}, # Each macro has a name and a key combination. Keycode reference linked above
+                    {"Name":"oneToOneZoom", "keycomb":[Mouse.LEFT_BUTTON]},
+                    {"Name":"crop", "keycomb":[Keycode.R]},
+                    {"Name":"loupe", "keycomb":[Keycode.E]},
+                    {"Name":"increaseFlag", "keycomb":[Keycode.CONTROL, Keycode.UP_ARROW]},
+                    {"Name":"toggleFilters", "keycomb":[Keycode.CONTROL, Keycode.L]},
+                    {"Name":"goPrevious", "keycomb":[Keycode.LEFT_ARROW]},
+                    {"Name":"decreaseFlag", "keycomb":[Keycode.CONTROL, Keycode.DOWN_ARROW]},
+                    {"Name":"goNext", "keycomb":[Keycode.RIGHT_ARROW]}
+                    ]
+            },
+            {"name":"Library", # Second mode starts here
+            "color":"blue",
+            "macros":
+                    [
+                    {"Name":"grid", "keycomb":[Keycode.G]},
+                    {"Name":"oneToOneZoom", "keycomb":[Mouse.LEFT_BUTTON]},
+                    {"Name":"crop", "keycomb":[Keycode.R]},
+                    {"Name":"loupe", "keycomb":[Keycode.E]},
+                    {"Name":"increaseFlag", "keycomb":[Keycode.CONTROL, Keycode.UP_ARROW]},
+                    {"Name":"toggleFilters", "keycomb":[Keycode.CONTROL, Keycode.L]},
+                    {"Name":"goPrevious", "keycomb":[Keycode.LEFT_ARROW]},
+                    {"Name":"decreaseFlag", "keycomb":[Keycode.CONTROL, Keycode.DOWN_ARROW]},
+                    {"Name":"goNext", "keycomb":[Keycode.RIGHT_ARROW]}
+                    ]
+            }]
 ```
 
 ## How to edit ```boot.py```

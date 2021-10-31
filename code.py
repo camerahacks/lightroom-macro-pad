@@ -30,6 +30,13 @@ from adafruit_hid.keycode import Keycode
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 
 # ------------------------
+# Edit config.py to make changes to macros
+# DO NOT edit the line in this file.
+# ------------------------
+
+import config
+
+# ------------------------
 # Definitions
 # ------------------------
 
@@ -46,269 +53,53 @@ layout = KeyboardLayoutUS(kbd)
 # Global Variables
 # ------------------------
 
-_VERSION = 'v0.5'
+_VERSION = 'v0.7'
 _DEBOUNCE = 0.020
 
-# ------------------------
-# Mode Classes
-# ------------------------
-
-# Add as many macros to the 'macros' function as the number
-# of buttons/switches in the same order you would like the
-# buttons to be organized in. Array index 0 will be triggered
-# by btn_0, index 1 by btn_1,...
-# If a button shouldn't do anything, add the 'nothing' macro
-# to its position
-
-class TestMode:
-    def name():
-        return 'Test Mode'
-
-    def color():
-        return ''
-
-    def macros():
-        # This is where you add the list of macros for this mode
-        # add as many macros as the number of buttons/switches.
-        return [nothing, nothing, nothing, nothing, nothing, nothing]
-
-class Culling:
-    
-    def name():
-        return 'Culling Shortcuts'
-    
-    def color():
-        return 'red'
-
-    def macros():
-        # This is where you add the list of macros for this mode
-        # add as many macros as the number of buttons/switches
-        return [grid, oneToOneZoom, crop, loupe, increaseFlag, toggleFilters, goPrevious, decreaseFlag, goNext]
-
-class LibraryModule:
-    def name():
-        return 'Library Module Shortcuts'
-
-    def color():
-        return 'green'
-
-    def macros():
-        return [grid, editKeywords, crop, nothing, increaseFlag, nothing, loupe, decreaseFlag, virtualCopy]
-
-class Photoshop:
-
-    def name():
-        return 'Photoshop Shortcuts'
-
-    def color():
-        return 'blue'
-
-    def macros():
-        return [nothing, nothing, nothing, nothing, nothing, nothing]
-
 
 # ------------------------
-# Shortcut/Macro Classes
+# Mode and Shortcut/Macro Classes
 # ------------------------
 
-### Shortcuts for all modules ###
-class nothing:
-
-    def macroName():
-        return 'Do Nothing'
-
-    def macro():
-        print('Do Nothing')
-
-class goNext:
-
-    def macroName():
-        return 'Next Picture'
-
-    def macro():
-        kbd.send(Keycode.RIGHT_ARROW)
-
-class goPrevious:
-
-    def macroName():
-        return 'Previous Picture'
-
-    def macro():
-        kbd.send(Keycode.LEFT_ARROW)
-
-class increaseFlag:
+class Macro:
+    def __init__(self, name, keycomb):
+        self.name = name
+        self.keycomb = keycomb
     
-    def macroName():
-        return 'Increase Flag Status'
-    
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.UP_ARROW)
+    def macroName(self):
+        return self.name
 
-class decreaseFlag:
-    
-    def macroName():
-        return 'Decrease Flag Status'
-    
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.DOWN_ARROW)
-
-class virtualCopy:
-
-    def macroName():
-        return 'Create Virtual Copy'
-
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.QUOTE)
-
-class toggleFilters:
-
-    def macroName():
-        return 'Toggle Filters On/Off'
-
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.L)
-
-class crop:
-
-    def macroName():
-        return 'Crop Photo'
-
-    def macro():
-        kbd.send(Keycode.R)
-
-### Module Specific Shortcuts ###
-
-### Library Module ###
-
-class editKeywords:
-
-    def macroName():
-        return 'Edit Keywords'
-
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.SHIFT, Keycode.K)
-
-class oneToOneZoom:
-
-    def macroName():
-        return 'Toggle Loupe and 1:1 Zoom'
-
-    def macro():
-        m.click(Mouse.LEFT_BUTTON)
-
-class loupe:
-
-    def macroName():
-        return "Loupe View"
-
-    def macro():
-        kbd.send(Keycode.E)
-
-class grid:
-
-    def macroName():
-        return "Grid View"
-
-    def macro():
-        kbd.send(Keycode.G)
-
-class compare:
-
-    def macroName():
-        return "Compare View"
-
-    def macro():
-        kbd.send(Keycode.C)
-
-class survey:
-
-    def macroName():
-        return "Survey View"
-
-    def macro():
-        kbd.send(Keycode.N)
-
-class selectFlagged:
-
-    def macroName():
-        return "Select Flagged Photos"
-
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.A)
-
-### Develop Module ###
-
-class whiteBalance:
-
-    def macroName():
-        return "Auto White Balance"
-
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.SHIFT, Keycode.U)
+    def macroCall(self):
+        kbd.send(*self.keycomb) #Expand keycode as parameters
 
 
-class copySettings:
+class Mode:
+    def __init__(self, name, color, macros):
+        self.name = name
+        self.color = color
+        self.macros = macros
 
-    def macroName():
-        return "Copy Develop Settings"
+    def modeName(self):
+        return self.name
 
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.SHIFT, Keycode.C)
+    def modeColor(self):
+        return self.color
 
-class pasteSettings:
+    def modeMacros(self):
+        mmacros = []
+        for macros in self.macros:
+            mmacros.append(Macro(macros['Name'], macros['keycomb']))
+        
+        return mmacros
 
-    def macroName():
-        return "Paste Develop Settings"
 
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.SHIFT, Keycode.V)
+modes = []
+for mmodes in config.configvar:
+    modes.append(Mode(mmodes['name'], mmodes['color'], mmodes['macros']))
 
-### Non-lightroom Macros ###
-# Mainly used for testing but can also be used inside Lightroom
-
-class copy:
-    
-    def macroName():
-        return "Copy"
-
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.C)
-
-class paste:
-
-    def macroName():
-        return "Paste"
-
-    def macro():
-        kbd.send(Keycode.CONTROL, Keycode.V)
-
-class chrome:
-
-    def macroName():
-        return "Launch Chrome Browser"
-
-    def macro():
-        kbd.send(Keycode.GUI, Keycode.R)
-        time.sleep(0.05)
-        layout.write('chrome\n')
-
-class explorer:
-
-    def macroName():
-        return "Launch Chrome Browser"
-
-    def macro():
-        kbd.send(Keycode.GUI, Keycode.R)
-        time.sleep(0.05)
-        layout.write('explorer\n')
-
-# Define Macro Classes to load 
-
-modes = [Culling,LibraryModule,Photoshop]
 curr_mode = modes[0]
-mode_macros = curr_mode.macros()
-mode_color = curr_mode.color()
-
+mode_macros = curr_mode.modeMacros()
+mode_color = curr_mode.modeColor()
 
 # ------------------------
 # Pin and Keypad configuration
@@ -335,8 +126,7 @@ mode_color = curr_mode.color()
 #    row_pins=(board.GP17, board.GP4, board.GP6),
 #    col_pins=(board.GP10, board.GP8))
 
-# Pi Pico     SW0        SW1        SW2        SW3        SW4        SW5        SW6         SW7         SW8         SW9       #
-board_pins = (board.GP0, board.GP1, board.GP2, board.GP6, board.GP8, board.GP7, board.GP11, board.GP13, board.GP12, board.GP16)
+board_pins = config.board_pins
 
 k = keypad.Keys(pins=board_pins, value_when_pressed=False, pull=True, interval=_DEBOUNCE)
 
@@ -358,10 +148,10 @@ while True:
         # Change mode
         curr_mode = modes[(modes.index(curr_mode)+1) % len(modes)]
         # Load up the mode macros
-        mode_macros = curr_mode.macros()
-        print(curr_mode) #DELETE
+        mode_macros = curr_mode.modeMacros()
+        print(curr_mode.name) #DELETE
     
     elif k_event and k_event.pressed:
         #print("keys", k_event.key_number, k_event.pressed) #DELETE
-        mode_macros[k_event.key_number].macro()
+        mode_macros[k_event.key_number].macroCall()
         print(mode_macros[k_event.key_number].macroName()) #DELETE
